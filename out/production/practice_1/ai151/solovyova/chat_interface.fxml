@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ai151.solovyova.ChatController">
+   <children>
+      <VBox prefHeight="533.0" prefWidth="603.0">
+         <children>
+            <HBox prefHeight="534.0" prefWidth="573.0">
+               <children>
+                  <ListView fx:id="messages" prefHeight="489.0" prefWidth="577.0" style="-fx-background-color: rgba(212,212,212,0.32);" />
+               </children></HBox>
+            <HBox prefHeight="86.0" prefWidth="573.0">
+               <children>
+                  <HBox pickOnBounds="false" prefHeight="48.0" prefWidth="490.0">
+                     <children>
+                        <TextField fx:id="textFld" prefHeight="41.0" prefWidth="493.0" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="sendBtn" mnemonicParsing="false" prefHeight="42.0" prefWidth="88.0" style="-fx-background-color: rgba(143,221,163,0.46);" text="Send" />
+               </children>
+            </HBox>
+         </children></VBox>
+      <VBox prefHeight="533.0" prefWidth="247.0">
+         <children>
+            <HBox prefHeight="147.0" prefWidth="215.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="38.0" prefWidth="217.0" style="-fx-background-color: rgba(143,221,163,0.46);" text="Local addresses" />
+               </children>
+            </HBox>
+            <ListView fx:id="addresses" prefHeight="517.0" prefWidth="217.0" style="-fx-background-color: rgba(164,246,196,0.33);" />
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="32.0" prefWidth="217.0" style="-fx-background-color: rgba(143,221,163,0.46);" text="Receiver" textAlignment="CENTER" />
+                  <Label fx:id="receiverLabel" alignment="TOP_LEFT" prefHeight="60.0" prefWidth="217.0" style="-fx-padding: 10 10 10 10; -fx-background-color: rgba(164,246,196,0.33);" text="Broadcast">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></Label>
+               </children>
+            </VBox>
+         </children></VBox>
+   </children>
+</HBox>
