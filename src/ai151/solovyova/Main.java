@@ -29,6 +29,7 @@ public class Main extends Application{
 
         ChatController controller = fxmlLoader.getController();
         ListView<String> messages = controller.getMessages();
+        ListView<String> addresses = controller.getAddresses();
 
         Thread thread = new Thread(() -> {
             DatagramSocket receiveSocket = null;
@@ -51,10 +52,16 @@ public class Main extends Application{
                 InetAddress senderAddress = receivePacket.getAddress();
                 int port = receivePacket.getPort();
 
+                Platform.runLater(() -> {
+                    if (!addresses.getItems().contains(senderAddress.getHostAddress())){
+                        addresses.getItems().add(senderAddress.getHostAddress());
+                    }
+                });
+
                 String receiveMessage = new String(receivePacket.getData());
                 Matcher matcher = regex.matcher(receiveMessage);
 
-                StringBuilder message = new StringBuilder(senderAddress.toString() + ":" + port + ": ");
+                StringBuilder message = new StringBuilder(senderAddress.getHostAddress() + ":" + port + ": ");
                 while(matcher.find())
                     message.append(receiveMessage.substring(matcher.start(), matcher.end()));
 

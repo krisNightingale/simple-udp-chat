@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public class ChatController implements Initializable {
@@ -40,26 +41,36 @@ public class ChatController implements Initializable {
         return messages;
     }
 
-    public Button getSendBtn() {
-        return sendBtn;
+    public ListView<String> getAddresses() {
+        return addresses;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ArrayList<String> addressesAvailable = new ArrayList<>();
-//        try {
-//           addressesAvailable = getHosts();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        addressesAvailable.add("192.168.0.255");
-        addressesAvailable.add("192.168.0.1");
+        String host = null;
+        try {
+           host = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        if (host != null){
+            addressesAvailable.add(host);
+            try {
+                String broadcastAddress = getIPBroadcast();
+                addressesAvailable.add(broadcastAddress);
+                receiverLabel.setText(broadcastAddress);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
+
         ObservableList<String> ipAddresses = FXCollections.observableArrayList(addressesAvailable);
 
         addresses.setItems(ipAddresses);
         messages.setPlaceholder(new Label("No messages yet"));
         messages.setFocusTraversable(false);
-
 
         addresses.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -103,14 +114,28 @@ public class ChatController implements Initializable {
         byte[] sendData;
         String message = textFld.getText();
         if (!message.equals("")){
-//            messages.getItems().add(message);
-//            messages.scrollTo(message);
             textFld.setText("");
-
             sendData = message.getBytes("UTF-8");
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, PORT);
             sendSocket.send(sendPacket);
         }
+    }
+
+    private String getIPBroadcast() throws SocketException {
+        Enumeration<NetworkInterface> interfaces =
+                NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = interfaces.nextElement();
+            if (networkInterface.isLoopback())
+                continue;    // Don't want to broadcast to the loopback interface
+            for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                InetAddress broadcast = interfaceAddress.getBroadcast();
+                if (broadcast == null)
+                    continue;
+                return broadcast.getHostAddress();
+            }
+        }
+        return null;
     }
 
     private ArrayList<String> getHosts() throws Exception {
@@ -132,7 +157,6 @@ public class ChatController implements Initializable {
         }
         //addresses = InetAddress.getAllByName(host.getHostAddress());
         //for (InetAddress address : addresses) System.out.println(address);
-
         ArrayList<String> stringAddresses = new ArrayList<>();
 
         for (InetAddress address: addresses) {
