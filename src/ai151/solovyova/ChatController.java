@@ -108,7 +108,7 @@ public class ChatController implements Initializable {
 
     private void sendMessage() throws Exception{
         DatagramSocket sendSocket = new DatagramSocket();;
-        String selectedAddress = addresses.getSelectionModel().getSelectedItem();
+        String selectedAddress = receiverLabel.getText();
         InetAddress IPAddress = InetAddress.getByName(selectedAddress);
 
         byte[] sendData;
