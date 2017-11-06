@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 public class ChatController implements Initializable {
 
     private final int PORT = 7645;
+    private String broadcastAddress;
 
     @FXML
     Label receiverLabel;
@@ -58,7 +59,7 @@ public class ChatController implements Initializable {
         if (host != null){
             addressesAvailable.add(host);
             try {
-                String broadcastAddress = getIPBroadcast();
+                broadcastAddress = getIPBroadcast();
                 addressesAvailable.add(broadcastAddress);
                 receiverLabel.setText(broadcastAddress);
             } catch (SocketException e) {
@@ -101,7 +102,7 @@ public class ChatController implements Initializable {
                         e.printStackTrace();
                     }
                 }
-                key.consume();
+                //key.consume();
             }
         });
     }
@@ -118,6 +119,11 @@ public class ChatController implements Initializable {
             sendData = message.getBytes("UTF-8");
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, PORT);
             sendSocket.send(sendPacket);
+        }
+        if (!selectedAddress.equals(broadcastAddress)){
+            message = "Me: " + message;
+            messages.getItems().add(message);
+            messages.scrollTo(message);
         }
     }
 

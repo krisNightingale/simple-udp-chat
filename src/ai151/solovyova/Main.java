@@ -69,12 +69,6 @@ public class Main extends Application{
                     messages.getItems().add(message.toString());
                     messages.scrollTo(message.toString());
                 });
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException exc) {
-                    exc.printStackTrace();
-                }
             }
         });
         thread.start();
